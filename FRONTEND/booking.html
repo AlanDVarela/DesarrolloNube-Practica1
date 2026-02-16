@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservar</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navbar"><div class="container"><a href="index.html" class="logo">🩺 MedCitas</a></div></nav>
+    <main class="container">
+        <a href="index.html" style="text-decoration:none; color:#666">← Volver</a>
+        <div class="card" style="max-width:500px; margin:20px auto;">
+            <h2 style="margin-top:0">Reservar con <span id="doc-name">...</span></h2>
+            <p id="doc-spec" style="color:#666; margin-bottom:20px"></p>
+            <form id="booking-form">
+                <input type="hidden" name="doctorId" id="doctorId">
+                <label>Nombre:</label><input type="text" name="patientName" required>
+                <label>Teléfono:</label><input type="tel" name="patientPhone" required>
+                <label>Email:</label><input type="email" name="patientEmail" required>
+                <label>Horario:</label><select name="time" id="timeSlot"></select>
+                <button type="submit" class="btn">Confirmar Cita</button>
+            </form>
+        </div>
+    </main>
+    <script src="js/app.js"></script>
+</body>
+</html>
