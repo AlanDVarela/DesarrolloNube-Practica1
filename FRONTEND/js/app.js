@@ -31,17 +31,42 @@ async function loadBooking() {
     const id = params.get('id');
     if (!id) return;
 
-    try {
-        const res = await fetch(`${API_URL}/doctors/${id}`);
-        const doc = await res.json();
-        
+    const dateInput = document.getElementById('date');
+
+    const setOptions = (doc) => {
         document.getElementById('doc-name').innerText = doc.name;
         document.getElementById('doc-spec').innerText = doc.specialty;
         document.getElementById('doctorId').value = doc._id;
-        
+
         const select = document.getElementById('timeSlot');
-        select.innerHTML = doc.availableHours.map(h => `<option value="${h}">${h}</option>`).join('');
-    } catch (e) { console.error(e); }
+        if (!doc.availableHours || doc.availableHours.length === 0) {
+            select.innerHTML = '<option disabled>Ningún horario disponible</option>';
+        } else {
+            select.innerHTML = doc.availableHours.map(h => `<option value="${h}">${h}</option>`).join('');
+        }
+    };
+
+    const loadForDate = async (date) => {
+        try {
+            const res = await fetch(`${API_URL}/doctors/${id}?date=${date}`);
+            if (!res.ok) {
+                console.error('Error cargando disponibilidad');
+                return;
+            }
+            const doc = await res.json();
+            setOptions(doc);
+        } catch (e) { console.error(e); }
+    };
+
+    // set default date to today
+    const today = new Date().toISOString().slice(0,10);
+    if (dateInput) dateInput.value = today;
+    await loadForDate(today);
+
+    if (dateInput) dateInput.addEventListener('change', (e) => {
+        const d = e.target.value;
+        loadForDate(d);
+    });
 }
 
 // Enviar Formulario
@@ -55,8 +80,12 @@ async function sendBooking(e) {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
-        if (res.ok) window.location.href = `success.html?name=${data.patientName}&time=${data.time}`;
-        else alert('Error al reservar');
+        if (res.ok) window.location.href = `success.html?name=${data.patientName}&date=${data.date}&time=${data.time}`;
+        else if (res.status === 409) alert('Horario ya reservado');
+        else {
+            const err = await res.json().catch(()=>null);
+            alert(err?.message || 'Error al reservar');
+        }
     } catch (error) { alert('Error de red'); }
 }
 
@@ -69,5 +98,10 @@ if (document.getElementById('booking-form')) {
 // Mostrar datos en success
 if (window.location.pathname.includes('success.html')) {
     const p = new URLSearchParams(window.location.search);
-    document.getElementById('success-msg').innerText = `Hola ${p.get('name')}, te esperamos a las ${p.get('time')}`;
+    const name = p.get('name');
+    const time = p.get('time');
+    const date = p.get('date');
+    document.getElementById('success-msg').innerText = date
+        ? `Hola ${name}, te esperamos el ${date} a las ${time}`
+        : `Hola ${name}, te esperamos a las ${time}`;
 }
