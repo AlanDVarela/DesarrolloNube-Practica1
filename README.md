@@ -24,9 +24,7 @@ La aplicación utiliza una arquitectura desacoplada:
 
 ## Funcionalidades
 1.  **Visualización de Especialistas:** El frontend consume la API para listar doctores cuyas imágenes están alojadas en S3.
-2.  **Gestión de Disponibilidad:** El sistema permite filtrar horarios disponibles por fecha para cada doctor.
-3.  **Reservas en Tiempo Real:** Validación de "Double-booking" mediante índices únicos en MongoDB para evitar citas duplicadas en el mismo horario.
-4.  **Actualización de Horarios:** Endpoint para que los administradores modifiquen la disponibilidad de los doctores.
+2.  **Gestión de Disponibilidad:** El sistema permite ver horarios disponibles por fecha para cada doctor.
 
 ## Configuración para Desarrollo
 
