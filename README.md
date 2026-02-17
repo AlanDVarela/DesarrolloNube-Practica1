@@ -66,4 +66,4 @@ La aplicación utiliza una arquitectura desacoplada:
 └── estructura.txt
 ```
 ## Demo
-[Link al video de YouTube]
+https://www.youtube.com/watch?v=THoIL0V0Bn4

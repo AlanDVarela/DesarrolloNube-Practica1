@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api"; 
+const API_URL = "http://3.80.75.254:3000/api"; 
 
 // Cargar Doctores (Index)
 async function loadDoctors() {
